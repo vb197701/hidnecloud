@@ -1,0 +1,186 @@
+# 文件路径: .github/workflows/main.yml
+name: HidenCloud Auto Renew (Python)
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 初始时间，脚本会自动修改这个分钟数
+    - cron: '9 2 * * *'
+
+permissions:
+  contents: read # 主脚本只需要读权限，修改权限交给 cron.yml
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # - name: Install Cloudflare WARP
+    #   uses: fscarmen/warp-on-actions@v1.4
+    #   with:
+    #     stack: ipv4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run Script
+      env:
+        PYTHONUTF8: "1"
+        PYTHONIOENCODING: UTF-8
+        NOTIFY_CHANNEL: ${{ vars.NOTIFY_CHANNEL || secrets.NOTIFY_CHANNEL }}
+        HIDEN_COOKIE: ${{ secrets.HIDEN_COOKIE }}
+        WP_APP_TOKEN_ONE: ${{ secrets.WP_APP_TOKEN_ONE }}
+        WP_UIDs: ${{ secrets.WP_UIDs }}
+        WXPUSHER_APP_TOKEN: ${{ secrets.WXPUSHER_APP_TOKEN }}
+        WXPUSHER_TOPIC_IDS: ${{ secrets.WXPUSHER_TOPIC_IDS }}
+        WXPUSHER_UIDS: ${{ secrets.WXPUSHER_UIDS }}
+        GOTIFY_URL: ${{ secrets.GOTIFY_URL }}
+        GOTIFY_TOKEN: ${{ secrets.GOTIFY_TOKEN }}
+        GOTIFY_PRIORITY: ${{ secrets.GOTIFY_PRIORITY }}
+        GOBOT_URL: ${{ secrets.GOBOT_URL }}
+        GOBOT_QQ: ${{ secrets.GOBOT_QQ }}
+        GOBOT_TOKEN: ${{ secrets.GOBOT_TOKEN }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
+        DEER_KEY: ${{ secrets.DEER_KEY }}
+        PUSHDEER_KEY: ${{ secrets.PUSHDEER_KEY }}
+        DEER_URL: ${{ secrets.DEER_URL }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        BARK_ARCHIVE: ${{ secrets.BARK_ARCHIVE }}
+        BARK_GROUP: ${{ secrets.BARK_GROUP }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        BARK_ICON: ${{ secrets.BARK_ICON }}
+        BARK_LEVEL: ${{ secrets.BARK_LEVEL }}
+        BARK_URL: ${{ secrets.BARK_URL }}
+        CHAT_URL: ${{ secrets.CHAT_URL }}
+        CHAT_TOKEN: ${{ secrets.CHAT_TOKEN }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        TG_API_HOST: ${{ secrets.TG_API_HOST }}
+        TG_PROXY_AUTH: ${{ secrets.TG_PROXY_AUTH }}
+        TG_PROXY_HOST: ${{ secrets.TG_PROXY_HOST }}
+        TG_PROXY_PORT: ${{ secrets.TG_PROXY_PORT }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        QYWX_ORIGIN: ${{ secrets.QYWX_ORIGIN }}
+        QYWX_AM: ${{ secrets.QYWX_AM }}
+        QYWX_KEY: ${{ secrets.QYWX_KEY }}
+        AIBOTK_KEY: ${{ secrets.AIBOTK_KEY }}
+        AIBOTK_TYPE: ${{ secrets.AIBOTK_TYPE }}
+        AIBOTK_NAME: ${{ secrets.AIBOTK_NAME }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+        PUSH_PLUS_TOKEN: ${{ secrets.PUSH_PLUS_TOKEN }}
+        PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
+        PUSH_PLUS_USER: ${{ secrets.PUSH_PLUS_USER }}
+        PUSH_PLUS_TEMPLATE: ${{ secrets.PUSH_PLUS_TEMPLATE }}
+        PUSH_PLUS_CHANNEL: ${{ secrets.PUSH_PLUS_CHANNEL }}
+        PUSH_PLUS_WEBHOOK: ${{ secrets.PUSH_PLUS_WEBHOOK }}
+        PUSH_PLUS_CALLBACKURL: ${{ secrets.PUSH_PLUS_CALLBACKURL }}
+        PUSH_PLUS_TO: ${{ secrets.PUSH_PLUS_TO }}
+        WE_PLUS_BOT_TOKEN: ${{ secrets.WE_PLUS_BOT_TOKEN }}
+        WE_PLUS_BOT_RECEIVER: ${{ secrets.WE_PLUS_BOT_RECEIVER }}
+        WE_PLUS_BOT_VERSION: ${{ secrets.WE_PLUS_BOT_VERSION }}
+        SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+        SMTP_SSL: ${{ secrets.SMTP_SSL }}
+        SMTP_EMAIL: ${{ secrets.SMTP_EMAIL }}
+        SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        SMTP_NAME: ${{ secrets.SMTP_NAME }}
+        SMTP_TO_EMAIL: ${{ secrets.SMTP_TO_EMAIL }}
+        PUSHME_KEY: ${{ secrets.PUSHME_KEY }}
+        PUSHME_URL: ${{ secrets.PUSHME_URL }}
+        FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+        FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
+        FSKEY: ${{ secrets.FSKEY }}
+        FSSECRET: ${{ secrets.FSSECRET }}
+        WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+        WEBHOOK_BODY: ${{ secrets.WEBHOOK_BODY }}
+        WEBHOOK_HEADERS: ${{ secrets.WEBHOOK_HEADERS }}
+        WEBHOOK_METHOD: ${{ secrets.WEBHOOK_METHOD }}
+        WEBHOOK_CONTENT_TYPE: ${{ secrets.WEBHOOK_CONTENT_TYPE }}
+        CHRONOCAT_QQ: ${{ secrets.CHRONOCAT_QQ }}
+        CHRONOCAT_TOKEN: ${{ secrets.CHRONOCAT_TOKEN }}
+        CHRONOCAT_URL: ${{ secrets.CHRONOCAT_URL }}
+        NTFY_URL: ${{ secrets.NTFY_URL }}
+        NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        NTFY_PRIORITY: ${{ secrets.NTFY_PRIORITY }}
+        NTFY_TOKEN: ${{ secrets.NTFY_TOKEN }}
+        NTFY_USERNAME: ${{ secrets.NTFY_USERNAME }}
+        NTFY_PASSWORD: ${{ secrets.NTFY_PASSWORD }}
+        NTFY_ACTIONS: ${{ secrets.NTFY_ACTIONS }}
+        WEBDAV_URL: ${{ secrets.WEBDAV_URL }}
+        WEBDAV_USER: ${{ secrets.WEBDAV_USER }}
+        WEBDAV_PASS: ${{ secrets.WEBDAV_PASS }}
+      run: |
+        set +e
+    
+        echo "::group::🚀 HidenCloud Renew - Attempt 1"
+        echo "========================================"
+        echo "🚀 HidenCloud Renew - Attempt 1"
+        echo "========================================"
+    
+        python main.py 2>&1 | tee attempt1.log
+        code=${PIPESTATUS[0]}
+    
+        echo "::group::🔎 Attempt 1 Highlights"
+        grep -E '\[RENEW_RESULT\]|\[COOKIE_NORMALIZED\]|支付成功|续期成功|登录失败|重跑|失败' attempt1.log || true
+        echo "::endgroup::"
+        echo "::endgroup::"
+    
+        if [ "$code" -eq 0 ]; then
+          echo "::notice title=HidenCloud Renew::✅ Attempt 1 succeeded"
+          {
+            echo "## HidenCloud Renew"
+            echo "- ✅ Attempt 1 succeeded"
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 0
+        fi
+    
+        echo "::warning title=HidenCloud Renew::⚠️ Attempt 1 failed with exit code $code"
+        {
+          echo "## HidenCloud Renew"
+          echo "- ⚠️ Attempt 1 failed with exit code $code"
+          echo "- ⏳ Sleep 10 minutes before retry"
+        } >> "$GITHUB_STEP_SUMMARY"
+    
+        sleep 600
+    
+        echo "::group::🔁 HidenCloud Renew - Attempt 2"
+        echo "========================================"
+        echo "🔁 HidenCloud Renew - Attempt 2"
+        echo "========================================"
+    
+        python main.py 2>&1 | tee attempt2.log
+        code=${PIPESTATUS[0]}
+    
+        echo "::group::🔎 Attempt 2 Highlights"
+        grep -E '\[RENEW_RESULT\]|\[COOKIE_NORMALIZED\]|支付成功|续期成功|登录失败|重跑|失败' attempt2.log || true
+        echo "::endgroup::"
+        echo "::endgroup::"
+    
+        if [ "$code" -eq 0 ]; then
+          echo "::notice title=HidenCloud Renew::✅ Attempt 2 succeeded"
+          {
+            echo "## HidenCloud Renew"
+            echo "- ✅ Attempt 2 succeeded"
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 0
+        fi
+    
+        echo "::error title=HidenCloud Renew::❌ Attempt 2 failed with exit code $code"
+        {
+          echo "## HidenCloud Renew"
+          echo "- ❌ Attempt 2 failed with exit code $code"
+        } >> "$GITHUB_STEP_SUMMARY"
+    
+        exit "$code"
