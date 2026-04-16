@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+
+findings.md
+progress.md
+task_plan.md
+
+docs/superpowers/plans/
+docs/superpowers/specs/
